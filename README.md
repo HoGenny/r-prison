@@ -1,6 +1,6 @@
 # Git 협업 규칙
 
-> 자세한 규칙은 [CONTRIBUTING.md](CONTRIBUTING.md)를 참고하세요.
+> 자세한 규칙은 [CONTRIBUTING.md](./.github/CONTRIBUTING.md)를 참고하세요.
 
 ## 브랜치 정책
 - main 브랜치에는 직접 push 하지 않습니다.
