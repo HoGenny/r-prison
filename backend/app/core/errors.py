@@ -13,23 +13,12 @@ class AppError(Exception):
 async def app_error_handler(_: Request, exc: AppError) -> JSONResponse:
     return JSONResponse(
         status_code=exc.status_code,
-        content={
-            "error": {
-                "code": exc.code,
-                "message": exc.detail,
-            }
-        },
+        content={"error": {"code": exc.code, "message": exc.detail}},
     )
 
 
-async def unhandled_exception_handler(_: Request, exc: Exception) -> JSONResponse:
-    _ = exc
+async def unhandled_exception_handler(_: Request, __: Exception) -> JSONResponse:
     return JSONResponse(
         status_code=500,
-        content={
-            "error": {
-                "code": "internal_error",
-                "message": "Internal server error",
-            }
-        },
+        content={"error": {"code": "internal_error", "message": "Internal server error"}},
     )

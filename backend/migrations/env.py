@@ -1,15 +1,23 @@
 from __future__ import annotations
 
-from logging.config import fileConfig
 import asyncio
+from logging.config import fileConfig
 
 from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from app.core.config import settings
+from app.models.achievement import Achievement, RewardClaim, UserAchievement  # noqa: F401
 from app.models.base import Base
+from app.models.gacha import GachaBox, GachaBoxRate, GachaDraw, GachaPityState  # noqa: F401
+from app.models.incubation import Incubation  # noqa: F401
+from app.models.item import Item, ItemTransaction, UserItem  # noqa: F401
+from app.models.rp import RPTransaction  # noqa: F401
 from app.models.session import UserSession  # noqa: F401
+from app.models.slime import Slime, UserSlime, UserSlimeShard  # noqa: F401
+from app.models.stats import DailyStat  # noqa: F401
+from app.models.todo import Todo  # noqa: F401
 from app.models.user import User  # noqa: F401
 
 
@@ -29,6 +37,7 @@ def run_migrations_offline() -> None:
         target_metadata=target_metadata,
         literal_binds=True,
         compare_type=True,
+        compare_server_default=True,
         dialect_opts={"paramstyle": "named"},
     )
 
@@ -37,7 +46,12 @@ def run_migrations_offline() -> None:
 
 
 def do_run_migrations(connection) -> None:  # type: ignore[no-untyped-def]
-    context.configure(connection=connection, target_metadata=target_metadata, compare_type=True)
+    context.configure(
+        connection=connection,
+        target_metadata=target_metadata,
+        compare_type=True,
+        compare_server_default=True,
+    )
 
     with context.begin_transaction():
         context.run_migrations()

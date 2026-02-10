@@ -18,12 +18,12 @@ cp .env.example .env
 docker compose up -d db
 ```
 
-## 3) Apply migrations
+## 3) Apply migration
 ```bash
 alembic upgrade head
 ```
 
-## 4) Start API
+## 4) Start API server
 ```bash
 uvicorn app.main:app --reload
 ```
@@ -33,7 +33,7 @@ uvicorn app.main:app --reload
 curl localhost:8000/health
 ```
 
-## Optional: create a new migration
+## Optional: autogenerate migration
 ```bash
 alembic revision --autogenerate -m "init"
 ```

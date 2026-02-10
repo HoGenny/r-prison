@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from sqlalchemy import BigInteger, DateTime, ForeignKey, String, func
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 
 from app.models.base import Base
 
@@ -26,5 +26,3 @@ class UserSession(Base):
         nullable=False,
         server_default=func.now(),
     )
-
-    user = relationship("User", back_populates="sessions")

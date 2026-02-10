@@ -43,7 +43,7 @@ out/
 *.log
 logs/
 
-### 4. 보안 및 설정 파일 (중요!) ###
+### 4. 보안 및 설정 파일 ###
 # API 키나 DB 비밀번호가 들어가는 파일들은 절대 올리면 안 됨
 application-secret.properties
 application-oauth.properties
