@@ -6,7 +6,7 @@ from app.core.errors import AppError, app_error_handler, unhandled_exception_han
 from app.schemas.common import HealthResponse
 
 
-app = FastAPI(title="R Prison API", version="0.2.0")
+app = FastAPI(title="R-Prison API", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
