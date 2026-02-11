@@ -1,5 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from datetime import datetime, timezone
 
 from app.schemas.todo import TodoCreate, TodoUpdate
 from app.models.todo import Todo
@@ -82,6 +83,14 @@ class TodoService:
             await session.flush()
         
         return todo
+    
+    async def delete_todo(self, session: AsyncSession, user_id: int, todo_id: int) -> None: # todo 삭제(soft delete)
+        todo = await self.get_todo(session, user_id, todo_id)
+
+        async with session.begin():
+            todo.deleted_at = datetime.now(timezone.utc)
+
+            await session.flush()
 
 
 todo_service = TodoService()
