@@ -12,19 +12,28 @@ router = APIRouter(prefix="/todos", tags=["todos"])
 # 각 user todo list 조회 (삭제한 항목 제외 모든 리스트 조회)
 @router.get("") 
 async def list_todos(
+    session: AsyncSession = Depends(get_db),
+    me: User = Depends(get_current_user),
+):
+    return await todo_service.list_todos(session, me.id)
+
+# todo 1건 상세 조회
+@router.get("/{todo_id}")
+async def get_todo(
+    todo_id: int,
     db: AsyncSession = Depends(get_db),
     me: User = Depends(get_current_user),
 ):
-    return await todo_service.list_todos(db, me.id)
+    return await todo_service.get_todo(db, me.id, todo_id)
 
 # todo list 생성(body에 content, scheduled_for, due_at, category, diffculty, reward_rp, due_at 포함)
 @router.post("") 
 async def create_todo(
   body: TodoCreate,
-  db: AsyncSession = Depends(get_db),
+  session: AsyncSession = Depends(get_db),
   me: User = Depends(get_current_user),
 ):
-  return await todo_service.create_todo(db, me.id, body)
+  return await todo_service.create_todo(session, me.id, body)
 
 
 
