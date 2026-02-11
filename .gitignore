@@ -34,17 +34,17 @@ yarn-error.log*
 .env.production.local
 
 ### 3. Backend (Spring Boot & Gradle) ###
-.gradle/
-build/
-out/
-!gradle/wrapper/gradle-wrapper.jar
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+.venv/
+venv/
+.pytest_cache/
 
-# 로그 파일
-*.log
-logs/
+# Alembic
+migrations/versions/__pycache__/
 
 ### 4. 보안 및 설정 파일 ###
-# API 키나 DB 비밀번호가 들어가는 파일들은 절대 올리면 안 됨
-application-secret.properties
-application-oauth.properties
-src/main/resources/application-API-KEY.properties
+# .env는 위 섹션에서 이미 무시됨
+backend/.env
