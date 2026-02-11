@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.schemas.todo import TodoCreate
+from app.schemas.todo import TodoCreate, TodoUpdate
 from app.models.todo import Todo
 from app.core.errors import AppError
 
@@ -38,7 +38,7 @@ class TodoService:
         return todo
       
 
-    async def create_todo(self, session: AsyncSession, user_id: int, data: TodoCreate) -> Todo: # todo list 생성 
+    async def create_todo(self, session: AsyncSession, user_id: int, data: TodoCreate) -> Todo: # todo 생성 
         content = data.content.strip()
         if not content:
             raise AppError("content is required", status_code=422, code="invalid_request")
@@ -60,5 +60,28 @@ class TodoService:
 
             return todo
     
+    async def update_todo(self, session: AsyncSession, user_id: int, todo_id: int, data: TodoUpdate) -> Todo: # todo 수정
+        todo = await self.get_todo(session, user_id, todo_id)
+
+        async with session.begin():
+            if data.content is not None:
+                todo.content = data.content.strip()
+            
+            if data.description is not None:
+                todo.description = data.description
+
+            if data.scheduled_for is not None:
+                todo.scheduled_for = data.scheduled_for
+
+            if data.due_at is not None:
+                todo.due_at = data.due_at
+            
+            if data.category is not None:
+                todo.category = data.category
+            
+            await session.flush()
+        
+        return todo
+
 
 todo_service = TodoService()
