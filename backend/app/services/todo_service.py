@@ -19,7 +19,26 @@ class TodoService:
         result = await session.execute(stmt)
         return list(result.scalars().all())
 
-    async def create_todo(self, session: AsyncSession, user_id: int, data: TodoCreate) -> Todo:
+    async def get_todo(self, session: AsyncSession, user_id: int, todo_id: int) -> Todo: # todo 1건 상세 검색
+        stmt = (
+            select(Todo)
+            .where(
+                Todo.id == todo_id,
+                Todo.user_id == user_id,
+                Todo.deleted_at.is_(None),
+            )
+        )
+
+        result = await session.execute(stmt)
+        todo = result.scalar_one_or_none()
+
+        if todo is None :
+            raise AppError("Todo not found", status_code=404, code="not found")
+        
+        return todo
+      
+
+    async def create_todo(self, session: AsyncSession, user_id: int, data: TodoCreate) -> Todo: # todo list 생성 
         content = data.content.strip()
         if not content:
             raise AppError("content is required", status_code=422, code="invalid_request")
