@@ -45,6 +45,7 @@ async def update_todo(
 ):
 	return await todo_service.update_todo(session, me.id, todo_id, body)
 
+# todo 삭제
 @router.delete("/{todo_id}")
 async def update_todo(
 	todo_id: int,
@@ -52,6 +53,15 @@ async def update_todo(
 	me: User = Depends(get_current_user),
 ):
 	return await todo_service.delete_todo(session, me.id, todo_id)
+
+# todo 완료 처리
+@router.post("/{todo_id}/complete")
+async def complete_todo(
+	todo_id: int,
+	session: AsyncSession = Depends(get_db),
+	me: User = Depends(get_current_user),
+):
+	return await todo_service.complete_todo(session, me.id, todo_id)
 
 
 
