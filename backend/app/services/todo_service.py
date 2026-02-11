@@ -96,6 +96,12 @@ class TodoService:
             await session.flush()
 
 
+    # todo 완료 처리 로직
+    # 0. 이미 완료된 todo 인지 확인(그럴 시 409)
+    # 1. 완료 처리
+    # 2. rp 로그에 기록
+    # 3. User 테이블 rp, rp_blance에 추가 
+    # 4. stats(하루 활동량 기록 로그)에 추가
     async def complete_todo(self, session: AsyncSession, user_id: int, todo_id: int) -> None: # todo 완료 처리  
         todo = await self.get_todo(session, user_id, todo_id)
 
@@ -168,6 +174,67 @@ class TodoService:
                 stat.todos_completed += 1
                 stat.rp_earned += todo.reward_rp
 
+    # todo 완료 취소 처리 로직
+    # 0. 이미 미완료(todo.completed_at is None)면 409
+    # 1. completed_at = None
+    # 2. rp 로그에 기록 (delta = -reward_rp)
+    # 3. User 테이블 rp, rp_balance 감소
+    # 4. stats(하루 활동량 기록 로그) 감소
+    async def uncomplete_todo(self, session: AsyncSession, user_id: int, todo_id: int) -> None:
+        todo = await self.get_todo(session, user_id, todo_id)
+
+        if todo.completed_at is None:
+            raise AppError("이미 미완료된 항목", status_code=409, code="already_uncompleted")
+
+        async with session.begin():
+
+            # 1. 완료 취소
+            todo.completed_at = None
+
+            # 2. RP 회수 로그 (음수)
+            session.add(
+                RPTransaction(
+                    user_id=user_id,
+                    delta=-todo.reward_rp,
+                    reason="todo_uncomplete",
+                    ref_type="todo",
+                    ref_id=todo.id,
+                )
+            )
+
+            # 3. User 조회 및 잔액 감소
+            result = await session.execute(select(User).where(User.id == user_id))
+            user = result.scalar_one()
+
+            # 잔액 음수 방지 정책
+            if user.rp_balance < todo.reward_rp:
+                raise AppError("RP 잔액이 부족하여 완료 취소할 수 없음", status_code=400, code="insufficient_rp")
+
+            user.rp_balance -= todo.reward_rp
+            
+            if user.rp < todo.reward_rp:
+                user.rp = 0
+            else:
+                user.rp -= todo.reward_rp
+
+            # 4. daily_stats 감소
+            stmt = select(DailyStat).where(
+                DailyStat.user_id == user_id,
+                DailyStat.date == todo.scheduled_for,
+            )
+            result = await session.execute(stmt)
+            stat = result.scalar_one_or_none()
+
+            if stat is None:
+                # complete 했던 기록이 있는데 stat이 없다면 데이터가 깨진 상태
+                raise AppError("DailyStat not found for uncomplete", status_code=400, code="stat_missing")
+
+            # 감소
+            if stat.todos_completed <= 0 or stat.rp_earned < todo.reward_rp:
+                raise AppError("DailyStat underflow", status_code=400, code="stat_underflow")
+
+            stat.todos_completed -= 1
+            stat.rp_earned -= todo.reward_rp
 
 
 todo_service = TodoService()

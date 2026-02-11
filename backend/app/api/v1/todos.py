@@ -63,6 +63,15 @@ async def complete_todo(
 ):
 	return await todo_service.complete_todo(session, me.id, todo_id)
 
+# todo 미미완료 처리
+@router.post("/{todo_id}/uncomplete")
+async def uncomplete_todo(
+	todo_id: int,
+	session: AsyncSession = Depends(get_db),
+	me: User = Depends(get_current_user),
+):
+	return await todo_service.uncomplete_todo(session, me.id, todo_id)
+
 
 
 
