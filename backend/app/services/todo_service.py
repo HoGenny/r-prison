@@ -6,7 +6,7 @@ from app.models.todo import Todo
 from app.core.errors import AppError
 
 class TodoService:
-    async def list_todos(self, session: AsyncSession, user_id: int) -> list[object]: # 유저의 todo list 목록 조회
+    async def list_todos(self, session: AsyncSession, user_id: int) -> list[Todo]: # 유저의 todo list 목록 조회
         stmt = (
           select(Todo)
           .where(
@@ -24,7 +24,6 @@ class TodoService:
         if not content:
             raise AppError("content is required", status_code=422, code="invalid_request")
 
-        # 트랜잭션으로 묶기 (팀 룰)
         async with session.begin():
             todo = Todo(
                 user_id=user_id,
