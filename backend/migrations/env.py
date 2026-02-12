@@ -10,12 +10,12 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from app.core.config import settings
 from app.models.achievement import Achievement, RewardClaim, UserAchievement  # noqa: F401
 from app.models.base import Base
-from app.models.gacha import GachaBox, GachaBoxRate, GachaDraw, GachaPityState  # noqa: F401
+from app.models.gacha import GachaBox, GachaBoxRate  # noqa: F401
 from app.models.incubation import Incubation  # noqa: F401
 from app.models.item import Item, ItemTransaction, UserItem  # noqa: F401
 from app.models.rp import RPTransaction  # noqa: F401
 from app.models.session import UserSession  # noqa: F401
-from app.models.slime import Slime, UserSlime, UserSlimeShard  # noqa: F401
+from app.models.slime import Slime  # noqa: F401
 from app.models.stats import DailyStat  # noqa: F401
 from app.models.todo import Todo  # noqa: F401
 from app.models.user import User  # noqa: F401

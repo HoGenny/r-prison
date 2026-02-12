@@ -1,8 +1,4 @@
-from datetime import datetime
-
 from pydantic import BaseModel, ConfigDict
-
-from app.models.base import SlimeRarity
 
 
 class GachaBoxRead(BaseModel):
@@ -12,11 +8,28 @@ class GachaBoxRead(BaseModel):
     code: str
     name: str
     price_rp: int
-    min_rarity: SlimeRarity | None = None
-    is_active: bool
-    created_at: datetime
+    min_rarity: str | None = None
 
 
-class GachaBoxesResponse(BaseModel):
-    boxes: list[GachaBoxRead]
-    seed_guide: str | None = None
+class GachaRateRead(BaseModel):
+    rarity: str
+    weight: int
+
+
+class GachaBoxListData(BaseModel):
+    items: list[GachaBoxRead]
+
+
+class GachaBoxRatesData(BaseModel):
+    box_id: int
+    rates: list[GachaRateRead]
+
+
+class GachaBoxListResponse(BaseModel):
+    ok: bool = True
+    data: GachaBoxListData
+
+
+class GachaBoxRatesResponse(BaseModel):
+    ok: bool = True
+    data: GachaBoxRatesData
