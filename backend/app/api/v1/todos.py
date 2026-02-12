@@ -29,11 +29,11 @@ async def get_todo(
 # todo list 생성(body에 content, scheduled_for, category, diffculty, reward_rp, due_at 포함)
 @router.post("") 
 async def create_todo(
-  body: TodoCreate,
-  session: AsyncSession = Depends(get_db),
-  me: User = Depends(get_current_user),
+    body: TodoCreate,
+    session: AsyncSession = Depends(get_db),
+    me: User = Depends(get_current_user),
 ):
-	return await todo_service.create_todo(session, me.id, body)
+    return await todo_service.create_todo(session, me.id, body)
 
 # todo 수정(content, description, scheduled_for, due_at, category만 가능)
 @router.patch("/{todo_id}")
