@@ -74,6 +74,35 @@ class CalendarService:
             "note": stat.note,
         }
 
+    async def get_summary(self, session: AsyncSession, user_id: int, from_: date, to_: date):
+        if from_ > to_:
+            from app.core.errors import AppError
+            raise AppError("날짜 범위에 문제가 있습니다.", status_code=422, code="invalid_request")
+
+        stmt = (
+            select(DailyStat)
+            .where(
+                DailyStat.user_id == user_id,
+                DailyStat.date >= from_,
+                DailyStat.date <= to_,
+            )
+            .order_by(DailyStat.date.asc())
+        )
+
+        result = await session.execute(stmt)
+        rows = result.scalars().all()
+
+        return [
+            {
+                "date": r.date,
+                "todos_completed": int(r.todos_completed or 0),
+                "rp_earned": int(r.rp_earned or 0),
+                "streak_day": int(r.streak_day or 0),
+            }
+            for r in rows
+        ]
+
+
 
 
 calendar_service = CalendarService()

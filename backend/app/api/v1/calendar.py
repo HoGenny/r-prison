@@ -1,6 +1,6 @@
 from datetime import date
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db import get_db
@@ -33,3 +33,12 @@ async def patch_calendar_note(
     me: User = Depends(get_current_user),
 ):
     return await calendar_service.upsert_note(session, me.id, day, body.note)
+
+@router.get("/summary")
+async def get_calendar_summary(
+    from_: date = Query(..., alias="from"),
+    to_: date = Query(..., alias="to"),
+    session: AsyncSession = Depends(get_db),
+    me: User = Depends(get_current_user),
+):
+    return await calendar_service.get_summary(session, me.id, from_, to_)
