@@ -12,6 +12,7 @@ pip install -e .
 ```bash
 cp .env.example .env
 ```
+`DATABASE_URL` default is `postgresql+asyncpg://app:app@localhost:5433/app`.
 
 ## 2) Start PostgreSQL
 ```bash
@@ -31,6 +32,12 @@ uvicorn app.main:app --reload
 ## 5) Health check
 ```bash
 curl localhost:8000/health
+```
+
+## 6) Catalog API checks
+```bash
+curl localhost:8000/gacha/boxes
+curl localhost:8000/slimes
 ```
 
 ## Optional: autogenerate migration
