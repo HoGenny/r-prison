@@ -16,3 +16,6 @@ class CalendarDayResponse(BaseModel):
     summary: DailyCalendarSummary
     note: Optional[str] = None
     todos: list[TodoRead]
+
+class CalendarNoteUpdate(BaseModel):
+    note: Optional[str] = None

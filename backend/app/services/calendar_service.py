@@ -2,12 +2,13 @@ from datetime import date
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from typing import Optional
 from app.models.todo import Todo
 from app.models.stats import DailyStat
 
 class CalendarService:
     @staticmethod
-    async def get_day(session: AsyncSession, *, user_id: int, day: date):
+    async def get_day(session: AsyncSession, *, user_id: int, day: date): # 달력에서 해당 날 todo 및 하루 활동량 가져오기
         todos_q = (
             select(Todo)
             .where(
@@ -43,6 +44,35 @@ class CalendarService:
             note = None
 
         return {"summary": summary, "note": note, "todos": todos}
+
+    async def upsert_note(self, session: AsyncSession, user_id: int, day: date, note: Optional[str]):
+        async with session.begin():
+            stmt = select(DailyStat).where(
+                DailyStat.user_id == user_id,
+                DailyStat.date == day,
+            )
+            result = await session.execute(stmt)
+            stat = result.scalar_one_or_none()
+
+            if stat is None:
+                stat = DailyStat(
+                    user_id=user_id,
+                    date=day,
+                    todos_completed=0,
+                    rp_earned=0,
+                    streak_day=0,
+                    note=note,
+                )
+                session.add(stat)
+                await session.flush()
+            else:
+                stat.note = note
+                await session.flush()
+
+        return {
+            "date": stat.date,
+            "note": stat.note,
+        }
 
 
 
