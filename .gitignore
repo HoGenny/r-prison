@@ -33,7 +33,7 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
-### 3. Backend (Spring Boot & Gradle) ###
+### 3. Backend (Fast API) ###
 __pycache__/
 *.py[cod]
 *.egg-info/
@@ -44,7 +44,3 @@ venv/
 
 # Alembic
 migrations/versions/__pycache__/
-
-### 4. 보안 및 설정 파일 ###
-# .env는 위 섹션에서 이미 무시됨
-backend/.env
