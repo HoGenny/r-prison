@@ -3,7 +3,7 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "gachon-food-map-backend"
+name = "r-prison-backend"
 version = "0.2.0"
 description = "FastAPI backend scaffold with async SQLAlchemy and Alembic"
 readme = "RUN.md"
