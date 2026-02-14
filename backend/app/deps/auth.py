@@ -14,24 +14,33 @@ async def get_current_user(
     db: AsyncSession = Depends(get_db),
     authorization: Annotated[str | None, Header()] = None,
 ) -> User:
-    candidate_user_id: int | None = None
+    """
+    Authorization 헤더에서 현재 로그인 유저를 추출한다.
 
-    if authorization:
-        scheme, _, token = authorization.partition(" ")
-        if scheme.lower() == "bearer" and token:
-            payload = decode_token(token)
-            sub = payload.get("sub")
-            if isinstance(sub, str) and sub.isdigit():
-                candidate_user_id = int(sub)
+    헤더 형식: "Bearer {access_token}"
 
-    if candidate_user_id is not None:
-        result = await db.execute(select(User).where(User.id == candidate_user_id))
-        user = result.scalar_one_or_none()
-        if user is not None:
-            return user
-
-    fallback = await db.execute(select(User).order_by(User.id).limit(1))
-    user = fallback.scalar_one_or_none()
-    if user is None:
+    Raises:
+        AppError(401): 헤더 누락, 형식 오류, 토큰 무효, 유저 미존재
+    """
+    if not authorization:
         raise AppError("Authentication required", status_code=401, code="unauthorized")
+
+    scheme, _, token = authorization.partition(" ")
+    if scheme.lower() != "bearer" or not token:
+        raise AppError(
+            "Invalid authorization header", status_code=401, code="unauthorized"
+        )
+
+    payload = decode_token(token, expected_type="access")
+    sub = payload.get("sub")
+
+    if not isinstance(sub, str) or not sub.isdigit():
+        raise AppError("Invalid token subject", status_code=401, code="invalid_token")
+
+    result = await db.execute(select(User).where(User.id == int(sub)))
+    user = result.scalar_one_or_none()
+
+    if user is None:
+        raise AppError("User not found", status_code=401, code="user_not_found")
+
     return user
