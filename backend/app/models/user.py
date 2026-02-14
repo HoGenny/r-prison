@@ -12,5 +12,9 @@ class User(TimestampMixin, Base):
     nickname: Mapped[str] = mapped_column(String(100), nullable=False)
     rp: Mapped[int] = mapped_column(BigInteger, nullable=False, server_default=text("0"))
     rp_balance: Mapped[int] = mapped_column(BigInteger, nullable=False, server_default=text("0"))
-    ticket_balance: Mapped[int] = mapped_column(BigInteger, nullable=False, server_default=text("0"))
-    premium_balance: Mapped[int] = mapped_column(BigInteger, nullable=False, server_default=text("0"))
+    ticket_balance: Mapped[int] = mapped_column(
+        BigInteger, nullable=False, server_default=text("0")
+    )
+    premium_balance: Mapped[int] = mapped_column(
+        BigInteger, nullable=False, server_default=text("0")
+    )

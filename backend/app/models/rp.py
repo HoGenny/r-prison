@@ -5,7 +5,6 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from app.models.base import Base
 
-
 # rp_transactions 테이블
 
 # 목적:
@@ -52,11 +51,10 @@ from app.models.base import Base
 # - reason은 UI/로그용 텍스트이므로 비즈니스 로직 판단 근거로 쓰지 않는다.
 # - ref_type 오타는 운영 장애로 직결되므로 상수 사용을 권장한다.
 
+
 class RPTransaction(Base):
     __tablename__ = "rp_transactions"
-    __table_args__ = (
-        Index("ix_rp_transactions_user_id_created_at", "user_id", "created_at"),
-    )
+    __table_args__ = (Index("ix_rp_transactions_user_id_created_at", "user_id", "created_at"),)
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(

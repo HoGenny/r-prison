@@ -5,17 +5,17 @@ Revises:
 Create Date: 2026-02-10 00:00:00.000000
 
 """
-from typing import Sequence, Union
 
-from alembic import op
+from collections.abc import Sequence
+
 import sqlalchemy as sa
-
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision: str = "20260210_0001"
-down_revision: Union[str, None] = None
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+down_revision: str | None = None
+branch_labels: str | Sequence[str] | None = None
+depends_on: str | Sequence[str] | None = None
 
 
 slime_rarity = sa.Enum(
@@ -53,8 +53,18 @@ def upgrade() -> None:
         sa.Column("rp_balance", sa.BigInteger(), server_default=sa.text("0"), nullable=False),
         sa.Column("ticket_balance", sa.BigInteger(), server_default=sa.text("0"), nullable=False),
         sa.Column("premium_balance", sa.BigInteger(), server_default=sa.text("0"), nullable=False),
-        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
-        sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
+        sa.Column(
+            "updated_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("nickname", name="uq_users_nickname"),
     )
@@ -78,7 +88,12 @@ def upgrade() -> None:
         sa.Column("price_rp", sa.BigInteger(), nullable=False),
         sa.Column("min_rarity", slime_rarity, nullable=True),
         sa.Column("is_active", sa.Boolean(), server_default=sa.text("true"), nullable=False),
-        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("code", name="uq_gacha_boxes_code"),
     )
@@ -90,7 +105,12 @@ def upgrade() -> None:
         sa.Column("name", sa.String(length=120), nullable=False),
         sa.Column("type", item_type, nullable=False),
         sa.Column("description", sa.Text(), nullable=True),
-        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("code", name="uq_items_code"),
     )
@@ -101,7 +121,12 @@ def upgrade() -> None:
         sa.Column("code", sa.String(length=64), nullable=False),
         sa.Column("name", sa.String(length=120), nullable=False),
         sa.Column("description", sa.Text(), nullable=False),
-        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("code", name="uq_achievements_code"),
     )
@@ -114,7 +139,12 @@ def upgrade() -> None:
         sa.Column("rp_earned", sa.BigInteger(), server_default=sa.text("0"), nullable=False),
         sa.Column("streak_day", sa.Integer(), server_default=sa.text("0"), nullable=False),
         sa.Column("note", sa.Text(), nullable=True),
-        sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column(
+            "updated_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
         sa.ForeignKeyConstraint(["user_id"], ["users.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("user_id", "date"),
     )
@@ -125,7 +155,12 @@ def upgrade() -> None:
         sa.Column("box_id", sa.BigInteger(), nullable=False),
         sa.Column("rarity", slime_rarity, nullable=False),
         sa.Column("weight", sa.Integer(), nullable=False),
-        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
         sa.ForeignKeyConstraint(["box_id"], ["gacha_boxes.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("box_id", "rarity", name="uq_gacha_box_rates_box_rarity"),
@@ -137,8 +172,15 @@ def upgrade() -> None:
         sa.Column("user_id", sa.BigInteger(), nullable=False),
         sa.Column("box_id", sa.BigInteger(), nullable=False),
         sa.Column("since_last_epic", sa.Integer(), server_default=sa.text("0"), nullable=False),
-        sa.Column("since_last_legendary", sa.Integer(), server_default=sa.text("0"), nullable=False),
-        sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column(
+            "since_last_legendary", sa.Integer(), server_default=sa.text("0"), nullable=False
+        ),
+        sa.Column(
+            "updated_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
         sa.ForeignKeyConstraint(["box_id"], ["gacha_boxes.id"], ondelete="CASCADE"),
         sa.ForeignKeyConstraint(["user_id"], ["users.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("user_id", "box_id"),
@@ -150,16 +192,25 @@ def upgrade() -> None:
         sa.Column("user_id", sa.BigInteger(), nullable=False),
         sa.Column("target_slime_id", sa.BigInteger(), nullable=False),
         sa.Column("rarity", slime_rarity, nullable=False),
-        sa.Column("started_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column(
+            "started_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
         sa.Column("ends_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("opened_at", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("status", incubation_status, server_default=sa.text("'incubating'"), nullable=False),
+        sa.Column(
+            "status", incubation_status, server_default=sa.text("'incubating'"), nullable=False
+        ),
         sa.ForeignKeyConstraint(["target_slime_id"], ["slimes.id"], ondelete="RESTRICT"),
         sa.ForeignKeyConstraint(["user_id"], ["users.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index("ix_incubations_user_id", "incubations", ["user_id"], unique=False)
-    op.create_index("ix_incubations_user_id_status", "incubations", ["user_id", "status"], unique=False)
+    op.create_index(
+        "ix_incubations_user_id_status", "incubations", ["user_id", "status"], unique=False
+    )
 
     op.create_table(
         "rp_transactions",
@@ -169,12 +220,22 @@ def upgrade() -> None:
         sa.Column("reason", sa.Text(), nullable=True),
         sa.Column("ref_type", sa.String(length=50), nullable=False),
         sa.Column("ref_id", sa.BigInteger(), nullable=True),
-        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
         sa.ForeignKeyConstraint(["user_id"], ["users.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index("ix_rp_transactions_user_id", "rp_transactions", ["user_id"], unique=False)
-    op.create_index("ix_rp_transactions_user_id_created_at", "rp_transactions", ["user_id", "created_at"], unique=False)
+    op.create_index(
+        "ix_rp_transactions_user_id_created_at",
+        "rp_transactions",
+        ["user_id", "created_at"],
+        unique=False,
+    )
 
     op.create_table(
         "todos",
@@ -187,15 +248,29 @@ def upgrade() -> None:
         sa.Column("completed_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("difficulty", sa.Integer(), server_default=sa.text("1"), nullable=False),
-        sa.Column("category", sa.String(length=50), server_default=sa.text("'general'"), nullable=False),
+        sa.Column(
+            "category", sa.String(length=50), server_default=sa.text("'general'"), nullable=False
+        ),
         sa.Column("reward_rp", sa.BigInteger(), server_default=sa.text("0"), nullable=False),
-        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
-        sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
+        sa.Column(
+            "updated_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
         sa.ForeignKeyConstraint(["user_id"], ["users.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index("ix_todos_user_id", "todos", ["user_id"], unique=False)
-    op.create_index("ix_todos_user_id_scheduled_for", "todos", ["user_id", "scheduled_for"], unique=False)
+    op.create_index(
+        "ix_todos_user_id_scheduled_for", "todos", ["user_id", "scheduled_for"], unique=False
+    )
 
     op.create_table(
         "user_sessions",
@@ -206,7 +281,12 @@ def upgrade() -> None:
         sa.Column("user_agent", sa.String(length=255), nullable=True),
         sa.Column("expires_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("revoked_at", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
         sa.ForeignKeyConstraint(["user_id"], ["users.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
     )
@@ -217,7 +297,12 @@ def upgrade() -> None:
         sa.Column("user_id", sa.BigInteger(), nullable=False),
         sa.Column("slime_id", sa.BigInteger(), nullable=False),
         sa.Column("qty", sa.BigInteger(), server_default=sa.text("0"), nullable=False),
-        sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column(
+            "updated_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
         sa.ForeignKeyConstraint(["slime_id"], ["slimes.id"], ondelete="CASCADE"),
         sa.ForeignKeyConstraint(["user_id"], ["users.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("user_id", "slime_id"),
@@ -231,7 +316,12 @@ def upgrade() -> None:
         sa.Column("level", sa.Integer(), server_default=sa.text("1"), nullable=False),
         sa.Column("exp", sa.BigInteger(), server_default=sa.text("0"), nullable=False),
         sa.Column("affection", sa.BigInteger(), server_default=sa.text("0"), nullable=False),
-        sa.Column("obtained_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column(
+            "obtained_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
         sa.Column("hatched_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("is_active", sa.Boolean(), server_default=sa.text("false"), nullable=False),
         sa.ForeignKeyConstraint(["slime_id"], ["slimes.id"], ondelete="CASCADE"),
@@ -245,7 +335,12 @@ def upgrade() -> None:
         sa.Column("user_id", sa.BigInteger(), nullable=False),
         sa.Column("item_id", sa.BigInteger(), nullable=False),
         sa.Column("qty", sa.BigInteger(), server_default=sa.text("0"), nullable=False),
-        sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column(
+            "updated_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
         sa.ForeignKeyConstraint(["item_id"], ["items.id"], ondelete="CASCADE"),
         sa.ForeignKeyConstraint(["user_id"], ["users.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("user_id", "item_id"),
@@ -259,19 +354,34 @@ def upgrade() -> None:
         sa.Column("delta", sa.BigInteger(), nullable=False),
         sa.Column("ref_type", sa.String(length=50), nullable=False),
         sa.Column("ref_id", sa.BigInteger(), nullable=True),
-        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
         sa.ForeignKeyConstraint(["item_id"], ["items.id"], ondelete="RESTRICT"),
         sa.ForeignKeyConstraint(["user_id"], ["users.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index("ix_item_transactions_user_id", "item_transactions", ["user_id"], unique=False)
-    op.create_index("ix_item_transactions_user_id_created_at", "item_transactions", ["user_id", "created_at"], unique=False)
+    op.create_index(
+        "ix_item_transactions_user_id_created_at",
+        "item_transactions",
+        ["user_id", "created_at"],
+        unique=False,
+    )
 
     op.create_table(
         "user_achievements",
         sa.Column("user_id", sa.BigInteger(), nullable=False),
         sa.Column("achievement_id", sa.BigInteger(), nullable=False),
-        sa.Column("unlocked_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column(
+            "unlocked_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
         sa.Column("claimed_at", sa.DateTime(timezone=True), nullable=True),
         sa.ForeignKeyConstraint(["achievement_id"], ["achievements.id"], ondelete="CASCADE"),
         sa.ForeignKeyConstraint(["user_id"], ["users.id"], ondelete="CASCADE"),
@@ -284,10 +394,17 @@ def upgrade() -> None:
         sa.Column("user_id", sa.BigInteger(), nullable=False),
         sa.Column("reward_type", sa.String(length=50), nullable=False),
         sa.Column("reward_key", sa.String(length=120), nullable=False),
-        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
         sa.ForeignKeyConstraint(["user_id"], ["users.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
-        sa.UniqueConstraint("user_id", "reward_type", "reward_key", name="uq_reward_claims_user_reward"),
+        sa.UniqueConstraint(
+            "user_id", "reward_type", "reward_key", name="uq_reward_claims_user_reward"
+        ),
     )
     op.create_index("ix_reward_claims_user_id", "reward_claims", ["user_id"], unique=False)
 
@@ -300,7 +417,12 @@ def upgrade() -> None:
         sa.Column("result_slime_id", sa.BigInteger(), nullable=False),
         sa.Column("spent_rp", sa.BigInteger(), nullable=False),
         sa.Column("incubation_id", sa.BigInteger(), nullable=True),
-        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
         sa.ForeignKeyConstraint(["box_id"], ["gacha_boxes.id"], ondelete="RESTRICT"),
         sa.ForeignKeyConstraint(["incubation_id"], ["incubations.id"], ondelete="SET NULL"),
         sa.ForeignKeyConstraint(["result_slime_id"], ["slimes.id"], ondelete="RESTRICT"),
@@ -308,7 +430,9 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index("ix_gacha_draws_user_id", "gacha_draws", ["user_id"], unique=False)
-    op.create_index("ix_gacha_draws_user_id_created_at", "gacha_draws", ["user_id", "created_at"], unique=False)
+    op.create_index(
+        "ix_gacha_draws_user_id_created_at", "gacha_draws", ["user_id", "created_at"], unique=False
+    )
 
 
 def downgrade() -> None:

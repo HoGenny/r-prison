@@ -1,5 +1,5 @@
-from datetime import datetime, timedelta, timezone
 import hashlib
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 import jwt
@@ -7,12 +7,11 @@ import jwt
 from app.core.config import settings
 from app.core.errors import AppError
 
-
 ALGORITHM = "HS256"
 
 
 def _utc_now() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 def hash_token(raw_token: str) -> str:

@@ -45,7 +45,9 @@ class UserAchievement(Base):
 class RewardClaim(Base):
     __tablename__ = "reward_claims"
     __table_args__ = (
-        UniqueConstraint("user_id", "reward_type", "reward_key", name="uq_reward_claims_user_reward"),
+        UniqueConstraint(
+            "user_id", "reward_type", "reward_key", name="uq_reward_claims_user_reward"
+        ),
     )
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)

@@ -1,10 +1,11 @@
-from datetime import date
-
 from __future__ import annotations
 
-from typing import Optional
+from datetime import date
+
 from pydantic import BaseModel
+
 from app.schemas.todo import TodoRead
+
 
 class DailyCalendarSummary(BaseModel):
     date: date
@@ -12,10 +13,12 @@ class DailyCalendarSummary(BaseModel):
     rp_earned: int
     streak_day: int
 
+
 class CalendarDayResponse(BaseModel):
     summary: DailyCalendarSummary
-    note: Optional[str] = None
+    note: str | None = None
     todos: list[TodoRead]
 
+
 class CalendarNoteUpdate(BaseModel):
-    note: Optional[str] = None
+    note: str | None = None

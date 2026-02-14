@@ -58,9 +58,7 @@ class GachaBoxRate(Base):
 
 class GachaDraw(Base):
     __tablename__ = "gacha_draws"
-    __table_args__ = (
-        Index("ix_gacha_draws_user_id_created_at", "user_id", "created_at"),
-    )
+    __table_args__ = (Index("ix_gacha_draws_user_id_created_at", "user_id", "created_at"),)
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(
@@ -107,7 +105,9 @@ class GachaPityState(Base):
         primary_key=True,
     )
     since_last_epic: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("0"))
-    since_last_legendary: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("0"))
+    since_last_legendary: Mapped[int] = mapped_column(
+        Integer, nullable=False, server_default=text("0")
+    )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         nullable=False,

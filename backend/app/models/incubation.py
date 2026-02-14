@@ -3,14 +3,18 @@ from datetime import datetime
 from sqlalchemy import BigInteger, DateTime, ForeignKey, Index, func, text
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.models.base import Base, IncubationStatus, SlimeRarity, incubation_status_enum, slime_rarity_enum
+from app.models.base import (
+    Base,
+    IncubationStatus,
+    SlimeRarity,
+    incubation_status_enum,
+    slime_rarity_enum,
+)
 
 
 class Incubation(Base):
     __tablename__ = "incubations"
-    __table_args__ = (
-        Index("ix_incubations_user_id_status", "user_id", "status"),
-    )
+    __table_args__ = (Index("ix_incubations_user_id_status", "user_id", "status"),)
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(

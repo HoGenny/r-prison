@@ -20,7 +20,6 @@ from app.models.stats import DailyStat  # noqa: F401
 from app.models.todo import Todo  # noqa: F401
 from app.models.user import User  # noqa: F401
 
-
 config = context.config
 config.set_main_option("sqlalchemy.url", settings.database_url)
 

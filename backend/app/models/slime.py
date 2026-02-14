@@ -1,6 +1,17 @@
 from datetime import datetime
 
-from sqlalchemy import BigInteger, Boolean, DateTime, ForeignKey, Index, Integer, String, Text, func, text
+from sqlalchemy import (
+    BigInteger,
+    Boolean,
+    DateTime,
+    ForeignKey,
+    Index,
+    Integer,
+    String,
+    Text,
+    func,
+    text,
+)
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.models.base import Base, SlimeRarity, slime_rarity_enum
@@ -19,9 +30,7 @@ class Slime(Base):
 
 class UserSlime(Base):
     __tablename__ = "user_slimes"
-    __table_args__ = (
-        Index("ix_user_slimes_user_id", "user_id"),
-    )
+    __table_args__ = (Index("ix_user_slimes_user_id", "user_id"),)
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(
