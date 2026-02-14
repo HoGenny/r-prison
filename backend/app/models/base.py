@@ -26,7 +26,7 @@ class TimestampMixin:
     )
 
 
-class SlimeRarity(str, enum.Enum):
+class SlimeRarity(enum.Enum):
     common = "common"
     uncommon = "uncommon"
     rare = "rare"
@@ -34,14 +34,14 @@ class SlimeRarity(str, enum.Enum):
     legendary = "legendary"
 
 
-class IncubationStatus(str, enum.Enum):
+class IncubationStatus(enum.Enum):
     incubating = "incubating"
     ready = "ready"
     opened = "opened"
     canceled = "canceled"
 
 
-class ItemType(str, enum.Enum):
+class ItemType(enum.Enum):
     consumable = "consumable"
     cosmetic = "cosmetic"
     material = "material"

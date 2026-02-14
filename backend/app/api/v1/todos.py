@@ -52,7 +52,7 @@ async def update_todo(
 
 # todo 삭제
 @router.delete("/{todo_id}")
-async def update_todo(
+async def delete_todo(
     todo_id: int,
     session: AsyncSession = Depends(get_db),
     me: User = Depends(get_current_user),
