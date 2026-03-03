@@ -45,7 +45,7 @@ target-version = "py311"
 line-length = 100
 
 # 검사 규칙 설정 (중요!)
-select = [
+lint.select = [
     "E",   # pycodestyle (표준 문법 에러)
     "W",   # pycodestyle (경고)
     "F",   # Pyflakes (논리적 오류: 미사용 변수 등)
@@ -57,7 +57,7 @@ select = [
 ]
 
 # 무시할 규칙 (팀 성향에 따라 조정 가능)
-ignore = [
+lint.ignore = [
     "E501", # 라인 길이 초과 (Formatter가 처리하므로 무시)
     "B008", # FastAPI Depends() 사용 시 발생하는 경고 방지
 ]
