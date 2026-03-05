@@ -16,3 +16,7 @@
 - PR 하나는 목적 하나(기능 하나)
 - 최소 1명 승인 후 Merge
 - Squash and merge 권장
+- Backend
+1. [ ] 로컬에서 `ruff check .` 실행 시 에러가 없는가?
+2. [ ] 모든 파일에 대해 `ruff format .`이 적용되었는가?
+3. [ ] 사용하지 않는 모듈(`import`)이 깨끗하게 정리되었는가?
