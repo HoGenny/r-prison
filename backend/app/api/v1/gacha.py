@@ -2,9 +2,8 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db import get_db
-from app.schemas.gacha import GachaBoxRead, GachaBoxesResponse
+from app.schemas.gacha import GachaBoxesResponse, GachaBoxRead
 from app.services.gacha_service import gacha_service
-
 
 router = APIRouter(prefix="/gacha", tags=["gacha"])
 

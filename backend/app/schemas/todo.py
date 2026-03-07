@@ -20,6 +20,7 @@ class TodoRead(BaseModel):
     created_at: datetime
     updated_at: datetime
 
+
 class TodoCreate(BaseModel):
     content: str = Field(min_length=1, max_length=255)
     description: str | None = None
@@ -29,9 +30,10 @@ class TodoCreate(BaseModel):
     category: str | None = Field(default=None, max_length=50)
     reward_rp: int | None = Field(default=None, ge=0)
 
+
 class TodoUpdate(BaseModel):
     content: str | None = None
     description: str | None = None
     scheduled_for: date | None = None
-    due_at: datetime | None = None  
+    due_at: datetime | None = None
     category: str | None = None

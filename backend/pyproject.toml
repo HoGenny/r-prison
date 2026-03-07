@@ -34,3 +34,42 @@ asyncio_mode = "auto"
 where = ["."]
 include = ["app*"]
 namespaces = true
+
+# Ruff 설정: 코드 품질 검사 및 포맷팅 도구
+
+[tool.ruff]
+# 대상 파이썬 버전
+target-version = "py311"
+
+# 한 줄의 최대 길이 (보통 88 또는 100을 선호합니다)
+line-length = 100
+
+# 검사 규칙 설정 (중요!)
+lint.select = [
+    "E",   # pycodestyle (표준 문법 에러)
+    "W",   # pycodestyle (경고)
+    "F",   # Pyflakes (논리적 오류: 미사용 변수 등)
+    "I",   # isort (임포트 정렬 자동화)
+    "B",   # flake8-bugbear (잠재적 버그 유발 패턴)
+    "C4",  # flake8-comprehensions (리스트 컴프리헨션 최적화)
+    "UP",  # pyupgrade (최신 파이썬 문법 권장)
+    "ARG", # flake8-unused-arguments (미사용 함수 인자 체크)
+]
+
+# 무시할 규칙 (팀 성향에 따라 조정 가능)
+lint.ignore = [
+    "E501", # 라인 길이 초과 (Formatter가 처리하므로 무시)
+    "B008", # FastAPI Depends() 사용 시 발생하는 경고 방지
+]
+
+[tool.ruff.lint.isort]
+# 임포트 정렬 시 FastAPI 관련 패키지를 가장 위로 올리고 싶다면 설정
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+known-first-party = ["app"]
+
+[tool.ruff.format]
+# 코드 포맷팅 스타일 설정 (Black과 유사)
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"

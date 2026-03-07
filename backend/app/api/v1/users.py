@@ -5,7 +5,6 @@ from app.core.db import get_db
 from app.schemas.user import UserMeResponse
 from app.services.auth_service import auth_service
 
-
 router = APIRouter(tags=["users"])
 
 

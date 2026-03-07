@@ -5,7 +5,6 @@ from app.api.router import api_router
 from app.core.errors import AppError, app_error_handler, unhandled_exception_handler
 from app.schemas.common import HealthResponse
 
-
 app = FastAPI(title="R-Prison API", version="0.1.0")
 
 app.add_middleware(

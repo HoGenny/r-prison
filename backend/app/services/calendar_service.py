@@ -1,14 +1,17 @@
 from datetime import date
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from typing import Optional
-from app.models.todo import Todo
 from app.models.stats import DailyStat
+from app.models.todo import Todo
+
 
 class CalendarService:
     @staticmethod
-    async def get_day(session: AsyncSession, *, user_id: int, day: date): # 달력에서 해당 날 todo 및 하루 활동량 가져오기
+    async def get_day(
+        session: AsyncSession, *, user_id: int, day: date
+    ):  # 달력에서 해당 날 todo 및 하루 활동량 가져오기
         todos_q = (
             select(Todo)
             .where(
@@ -45,7 +48,7 @@ class CalendarService:
 
         return {"summary": summary, "note": note, "todos": todos}
 
-    async def upsert_note(self, session: AsyncSession, user_id: int, day: date, note: Optional[str]):
+    async def upsert_note(self, session: AsyncSession, user_id: int, day: date, note: str | None):
         async with session.begin():
             stmt = select(DailyStat).where(
                 DailyStat.user_id == user_id,
@@ -77,6 +80,7 @@ class CalendarService:
     async def get_summary(self, session: AsyncSession, user_id: int, from_: date, to_: date):
         if from_ > to_:
             from app.core.errors import AppError
+
             raise AppError("날짜 범위에 문제가 있습니다.", status_code=422, code="invalid_request")
 
         stmt = (
@@ -101,8 +105,6 @@ class CalendarService:
             }
             for r in rows
         ]
-
-
 
 
 calendar_service = CalendarService()

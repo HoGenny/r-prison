@@ -6,8 +6,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.db import get_db
 from app.deps.auth import get_current_user
 from app.models.user import User
+from app.schemas.calendar import CalendarNoteUpdate
 from app.schemas.todo import TodoRead
-from app.schemas.calendar import DailyCalendarSummary, CalendarDayResponse, CalendarNoteUpdate
 from app.services.calendar_service import calendar_service
 
 router = APIRouter(prefix="/calendar", tags=["calendar"])
@@ -25,6 +25,7 @@ async def get_calendar_day(
 
     return data
 
+
 @router.patch("/day/{day}/note")
 async def patch_calendar_note(
     day: date,
@@ -33,6 +34,7 @@ async def patch_calendar_note(
     me: User = Depends(get_current_user),
 ):
     return await calendar_service.upsert_note(session, me.id, day, body.note)
+
 
 @router.get("/summary")
 async def get_calendar_summary(

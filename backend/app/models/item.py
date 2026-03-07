@@ -1,6 +1,16 @@
 from datetime import datetime
 
-from sqlalchemy import BigInteger, DateTime, ForeignKey, Index, String, Text, UniqueConstraint, func, text
+from sqlalchemy import (
+    BigInteger,
+    DateTime,
+    ForeignKey,
+    Index,
+    String,
+    Text,
+    UniqueConstraint,
+    func,
+    text,
+)
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.models.base import Base, ItemType, item_type_enum
@@ -46,9 +56,7 @@ class UserItem(Base):
 
 class ItemTransaction(Base):
     __tablename__ = "item_transactions"
-    __table_args__ = (
-        Index("ix_item_transactions_user_id_created_at", "user_id", "created_at"),
-    )
+    __table_args__ = (Index("ix_item_transactions_user_id_created_at", "user_id", "created_at"),)
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(

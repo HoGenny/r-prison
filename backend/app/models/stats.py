@@ -58,6 +58,7 @@ from app.models.base import Base
 #   신뢰 기준(source of truth)은 todos / rp_transactions 이다.
 # - 데이터가 이상하면 집계 재계산으로 복구 가능해야 한다.
 
+
 class DailyStat(Base):
     __tablename__ = "daily_stats"
 

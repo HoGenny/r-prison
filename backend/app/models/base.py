@@ -3,7 +3,8 @@ from __future__ import annotations
 import enum
 from datetime import datetime
 
-from sqlalchemy import DateTime, Enum as SqlEnum, func
+from sqlalchemy import DateTime, func
+from sqlalchemy import Enum as SqlEnum
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -25,7 +26,7 @@ class TimestampMixin:
     )
 
 
-class SlimeRarity(str, enum.Enum):
+class SlimeRarity(enum.Enum):
     common = "common"
     uncommon = "uncommon"
     rare = "rare"
@@ -33,14 +34,14 @@ class SlimeRarity(str, enum.Enum):
     legendary = "legendary"
 
 
-class IncubationStatus(str, enum.Enum):
+class IncubationStatus(enum.Enum):
     incubating = "incubating"
     ready = "ready"
     opened = "opened"
     canceled = "canceled"
 
 
-class ItemType(str, enum.Enum):
+class ItemType(enum.Enum):
     consumable = "consumable"
     cosmetic = "cosmetic"
     material = "material"
@@ -51,7 +52,9 @@ def slime_rarity_enum() -> SqlEnum:
 
 
 def incubation_status_enum() -> SqlEnum:
-    return SqlEnum(IncubationStatus, name="incubation_status", native_enum=False, validate_strings=True)
+    return SqlEnum(
+        IncubationStatus, name="incubation_status", native_enum=False, validate_strings=True
+    )
 
 
 def item_type_enum() -> SqlEnum:

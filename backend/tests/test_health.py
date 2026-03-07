@@ -9,7 +9,6 @@ os.environ.setdefault("REFRESH_TOKEN_EXPIRE_DAYS", "30")
 
 from app.main import app
 
-
 client = TestClient(app)
 
 
