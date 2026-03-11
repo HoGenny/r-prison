@@ -1,8 +1,8 @@
 /// <reference types="nativewind/types" />
 
-import "react-native";
+import 'react-native';
 
-declare module "react-native" {
+declare module 'react-native' {
   interface ViewProps {
     className?: string;
   }
