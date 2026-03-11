@@ -16,6 +16,11 @@
 - PR 하나는 목적 하나(기능 하나)
 - 최소 1명 승인 후 Merge
 - Squash and merge 권장
+
+### Frontend
+1. [ ] 로컬에서 `npx eslint .` 실행 시 에러가 없는가?
+2. [ ] 모든 파일에 대해 `npx prettier --write .`이 적용되었는가?
+
 ### Backend
 1. [ ] 로컬에서 `ruff check .` 실행 시 에러가 없는가?
 2. [ ] 모든 파일에 대해 `ruff format .`이 적용되었는가?
